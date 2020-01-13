@@ -34,7 +34,11 @@ import flask
 import dogpile.cache
 import six
 
-from flask_fas_openid import FAS
+#from flask_fas_openid import FAS
+from fedora.client import AuthError, AppError
+from fedora.cleint.fas2 import AccountSystem
+from flask_oidc import OpenIDConnect
+
 from six.moves.urllib.parse import urlparse, urljoin
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug import secure_filename
@@ -68,8 +72,9 @@ if 'NUANCIER_CONFIG' in os.environ:  # pragma: no cover
     APP.config.from_envvar('NUANCIER_CONFIG')
 
 # Set up FAS extension
-FAS = FAS(APP)
-APP.wsgi_app = nuancier.proxy.ReverseProxied(APP.wsgi_app)
+#FAS = FAS(APP)
+#APP.wsgi_app = nuancier.proxy.ReverseProxied(APP.wsgi_app)
+OIDC = OpenIDConnect(APP, credentials_store=flask.session)
 
 # Initialize the cache.
 CACHE = dogpile.cache.make_region().configure(
@@ -374,6 +379,7 @@ def msg():
 
 
 @APP.route('/login/', methods=['GET', 'POST'])
+@OIDC.require_login
 def login():  # pragma: no cover
     ''' Login mechanism for this application.
     '''
@@ -429,7 +435,9 @@ def logout():  # pragma: no cover
         next_url = flask.url_for('.index')
 
     if hasattr(flask.g, 'fas_user') and flask.g.fas_user is not None:
-        FAS.logout()
+        OIDC.logout()
+        flask.g.fas_user = None
+        flask.session.fas_user = None
         flask.flash('You are no longer logged-in')
 
     return flask.redirect(next_url)
