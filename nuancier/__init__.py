@@ -73,8 +73,17 @@ if 'NUANCIER_CONFIG' in os.environ:  # pragma: no cover
 
 # Set up FAS extension
 #FAS = FAS(APP)
-#APP.wsgi_app = nuancier.proxy.ReverseProxied(APP.wsgi_app)
+
 OIDC = OpenIDConnect(APP, credentials_store=flask.session)
+APP.wsgi_app = nuancier.proxy.ReverseProxied(APP.wsgi_app)
+
+# FAS for usernames.
+FAS2 = AccountSystem(
+    APP.config['FAS_BASE_URL'],
+    username=APP.config['FAS_USERNAME'],
+    password=APP.config['FAS_PASSWORD'],
+    insecure=not APP.config['FAS_CHECK_CERT']
+)
 
 # Initialize the cache.
 CACHE = dogpile.cache.make_region().configure(
