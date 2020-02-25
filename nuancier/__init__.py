@@ -34,6 +34,10 @@ import flask
 import dogpile.cache
 import six
 
+# Check more documentaion at https://fedoraproject.org/wiki/Infrastructure/Authentication
+# and https://github.com/puiterwijk/flask-oidc/blob/master/example.py
+# https://pythonhosted.org/python-fedora/flask_fas_openid.html
+#
 #from flask_fas_openid import FAS
 from fedora.client import AuthError, AppError
 from fedora.cleint.fas2 import AccountSystem
