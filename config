@@ -1,4 +1,3 @@
 OIDC_ID_TOKEN_COOKIE_SECURE = False
 OIDC_REQUIRE_VERIFIED_EMAIL = False
-FAS_OPENID_ENDPOINT = http://id.fedoraproject.org/
 FAS_CHECK_CERT = False
