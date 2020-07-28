@@ -433,7 +433,7 @@ def login():  # pragma: no cover
 
         groups.extend(voters)
 
-        return flask.redirect(return_point)
+        return flask.redirect(next_url)
 
 
 @APP.route('/logout/')
