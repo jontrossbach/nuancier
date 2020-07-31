@@ -19,6 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
  # You can change the host port that is forwarded to 5000 on the guest
  # if you have other services listening on your host's port 5000.
  config.vm.network "forwarded_port", guest: 5000, host: 5000
+ config.vm.network "forwarded_port", guest: 443, host: 8443, auto_correct: true
 
  # This is an optional plugin that, if installed, updates the host's /etc/hosts
  # file with the hostname of the guest VM. In Fedora it is packaged as

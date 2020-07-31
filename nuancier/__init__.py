@@ -452,6 +452,9 @@ def logout():  # pragma: no cover
     if hasattr(flask.g, 'fas_user') and flask.g.fas_user is not None:
         OIDC.logout()
         flask.flash('You are no longer logged-in')
+        flask.g.fas_user = None
+        flask.session.fas_user = None
+        flask.flash('You have been logged out')
 
     return flask.redirect(next_url)
 
